@@ -125,8 +125,8 @@
         }
       </style>
       
-      <header class="fixed w-full">
-        <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
+      <header class="fixed w-full top-0 left-0 z-50">
+        <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900 shadow-md">
           <div class="flex items-center justify-between max-w-screen-xl px-4 mx-auto">
             <!-- Logo Section -->
             <a href="#" class="flex items-center">
@@ -154,41 +154,22 @@
             </button>
       
             <!-- Navbar Links -->
-            <div
-              id="mobile-menu"
-              class="hidden lg:flex flex-col lg:flex-row lg:space-x-8 lg:mt-0"
-            >
+            <div id="mobile-menu" class="hidden lg:flex flex-col lg:flex-row lg:space-x-8 lg:mt-0">
               <ul class="flex flex-col lg:flex-row font-medium lg:space-x-8 lg:mt-0">
                 <li>
-                  <a
-                    href="#home"
-                    class="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 dark:text-white"
-                    aria-current="page"
-                  >Home</a>
+                  <a href="#home" class="nav-link">Home</a>
                 </li>
                 <li>
-                  <a
-                    href="#about-us"
-                    class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                  >About Us</a>
+                  <a href="#about-us" class="nav-link">About Us</a>
                 </li>
                 <li>
-                  <a
-                    href="#services"
-                    class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                  >Services</a>
+                  <a href="#services" class="nav-link">Services</a>
                 </li>
                 <li>
-                  <a
-                    href="#portfolio"
-                    class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                  >Portfolio</a>
+                  <a href="#portfolio" class="nav-link">Portfolio</a>
                 </li>
                 <li>
-                  <a
-                    href="#contact"
-                    class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                  >Contact</a>
+                  <a href="#contact" class="nav-link">Contact</a>
                 </li>
               </ul>
             </div>
@@ -207,13 +188,13 @@
       
           // Highlight active link on scroll
           const sections = document.querySelectorAll("section");
-          const navLinks = document.querySelectorAll("nav ul li a");
+          const navLinks = document.querySelectorAll(".nav-link");
       
           function activateLink() {
             let currentSection = "";
       
             sections.forEach((section) => {
-              const sectionTop = section.offsetTop - 80; // Adjust offset for navbar height
+              const sectionTop = section.offsetTop - 80;
               const sectionHeight = section.offsetHeight;
       
               if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
@@ -222,9 +203,9 @@
             });
       
             navLinks.forEach((link) => {
-              link.classList.remove("active");
+              link.classList.remove("text-purple-700", "font-bold");
               if (link.getAttribute("href").substring(1) === currentSection) {
-                link.classList.add("active");
+                link.classList.add("text-purple-700", "font-bold");
               }
             });
           }
@@ -232,6 +213,23 @@
           window.addEventListener("scroll", activateLink);
         });
       </script>
+      
+      <style>
+        .nav-link {
+          display: block;
+          padding: 10px 15px;
+          text-decoration: none;
+          color: #4a4a4a;
+          transition: color 0.3s ease;
+        }
+      
+        .nav-link:hover {
+          color: #6b46c1;
+        }
+      </style>
+      
+      
+      
       
 
 
@@ -343,15 +341,15 @@
 
         <style>
             .service-img-wrapper {
-                overflow: hidden; /* Ensures the scrolling happens within the visible area */
+                overflow: hidden;
                 position: relative;
-                z-index: 1; /* Normal z-index */
+                padding-top: 50px; /* Creates space above images to prevent navbar overlap */
             }
 
             .service-img-container {
                 display: flex;
-                gap: 150px; /* Ensures ample spacing between images */
-                animation: scroll 30s linear infinite; /* Continuous scrolling animation */
+                gap: 150px;
+                animation: scroll 30s linear infinite;
                 will-change: transform;
             }
 
@@ -361,7 +359,7 @@
                 align-items: center;
                 width: 100px;
                 height: 100px;
-                flex-shrink: 0; /* Prevents the images from resizing */
+                flex-shrink: 0;
             }
 
             .service-img-item img {
@@ -375,18 +373,19 @@
                     transform: translateX(0);
                 }
                 to {
-                    transform: translateX(-50%); /* Scroll halfway to show the next set */
+                    transform: translateX(-50%);
                 }
             }
 
-            /* Mobile-specific adjustments */
+            /* Mobile-specific fixes */
             @media (max-width: 768px) {
                 .service-img-container {
-                    animation: scroll 15s linear infinite; /* Doubles the speed */
+                    animation: scroll 7s linear infinite; /* Faster scrolling */
                 }
 
                 .service-img-wrapper {
-                    z-index: 1; /* Moves images two layers lower */
+                    padding-top: 80px; /* Push images down further on mobile */
+                    clip-path: inset(10% 0 0 0); /* Hides top 10% of images to prevent overlap */
                 }
             }
         </style>
