@@ -341,10 +341,11 @@
             </div>
         </section>
 
-
         <style>
             .service-img-wrapper {
                 overflow: hidden; /* Ensures the scrolling happens within the visible area */
+                position: relative;
+                z-index: 1; /* Normal z-index */
             }
 
             .service-img-container {
@@ -376,15 +377,21 @@
                 to {
                     transform: translateX(-50%); /* Scroll halfway to show the next set */
                 }
-            
-            /* Faster scrolling for mobile devices */
+            }
+
+            /* Mobile-specific adjustments */
             @media (max-width: 768px) {
                 .service-img-container {
                     animation: scroll 15s linear infinite; /* Doubles the speed */
                 }
+
+                .service-img-wrapper {
+                    z-index: -2; /* Moves images two layers lower */
+                }
             }
         </style>
 <!-- End block -->
+
 
 
 
