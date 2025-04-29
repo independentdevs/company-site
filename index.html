@@ -1,7 +1,7 @@
 <!DOCTYPE html>
- <html lang="en">
+<html lang="en">
 <head>
-    <link rel="canonical" href="https://https://demo.themesberg.com/landwind/" />
+    <link rel="canonical" href="https://demo.themesberg.com/landwind/" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,12 +16,12 @@
     <meta name="author" content="Themesberg">
 
     <!-- Social media share -->
-    <meta property="og:title" content=Landwind - Nebula IT>
-    <meta property="og:site_name" content=Themesberg>
-    <meta property="og:url" content=https://https://demo.themesberg.com/landwind/>
-    <meta property="og:description" content=Get started with a free and open-source landing page for Tailwind CSS built with the Flowbite component library featuring dark mode, hero sections, pricing cards, and more.>
+    <meta property="og:title" content="Landwind - Nebula IT">
+    <meta property="og:site_name" content="Themesberg">
+    <meta property="og:url" content="https://demo.themesberg.com/landwind/">
+    <meta property="og:description" content="Get started with a free and open-source landing page for Tailwind CSS built with the Flowbite component library featuring dark mode, hero sections, pricing cards, and more.">
     <meta property="og:type" content="">
-    <meta property="og:image" content=https://themesberg.s3.us-east-2.amazonaws.com/public/github/landwind/og-image.png>
+    <meta property="og:image" content="https://themesberg.s3.us-east-2.amazonaws.com/public/github/landwind/og-image.png">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@themesberg" />
     <meta name="twitter:creator" content="@themesberg" />
@@ -38,77 +38,112 @@
 </head>
 <body>
 
-    <!-- Loader -->
-        <div id="loader" class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
-            <div class="loader">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </div>
+<!-- Loader -->
+<div id="loader" class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50 transition-opacity duration-500">
+    <div class="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
 
-    <!-- CSS for Loader -->
-    <style>
-        /* Ensure full-page coverage */
-        #loader {
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: white;
-            z-index: 9999;
-        }
+<!-- Loader CSS -->
+<style>
+    #loader {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        z-index: 9999;
+    }
 
-        /* Loader animation */
-        .loader {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
+    .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
 
-        .loader div {
-            width: 15px;
-            height: 15px;
-            background: linear-gradient(45deg, #A855F7, #F97316);
-            border-radius: 50%;
-            animation: bounce 1.2s infinite ease-in-out;
-        }
+    .loader div {
+        width: 15px;
+        height: 15px;
+        background: linear-gradient(45deg, #A855F7, #F97316);
+        border-radius: 50%;
+        animation: bounce 1.2s infinite ease-in-out;
+    }
 
-        .loader div:nth-child(2) {
-            animation-delay: 0.2s;
-        }
+    .loader div:nth-child(2) { animation-delay: 0.2s; }
+    .loader div:nth-child(3) { animation-delay: 0.4s; }
+    .loader div:nth-child(4) { animation-delay: 0.6s; }
 
-        .loader div:nth-child(3) {
-            animation-delay: 0.4s;
-        }
+    @keyframes bounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+    }
+</style>
 
-        .loader div:nth-child(4) {
-            animation-delay: 0.6s;
-        }
+<!-- Optimized Loader Script -->
+<script>
+    const MAX_LOAD_TIME = 7000; // Fallback timeout (7 seconds)
+    const hasVisited = document.cookie.includes("visited=true");
 
-        @keyframes bounce {
-            0%, 80%, 100% {
-                transform: scale(0);
+    function hideLoader() {
+        const loader = document.getElementById("loader");
+        loader.style.opacity = "0";
+        setTimeout(() => {
+            loader.style.display = "none";
+        }, 500);
+    }
+
+    if (!hasVisited) {
+        window.addEventListener("DOMContentLoaded", () => {
+            const mediaElements = Array.from(document.querySelectorAll("img, video"))
+                .filter(el => el.getBoundingClientRect().top < window.innerHeight);
+
+            let loaded = 0;
+            let done = false;
+
+            const finishLoading = () => {
+                if (!done) {
+                    hideLoader();
+                    document.cookie = "visited=true; max-age=86400";
+                    done = true;
+                }
+            };
+
+            if (mediaElements.length === 0) {
+                finishLoading();
+            } else {
+                mediaElements.forEach(el => {
+                    const handle = () => {
+                        loaded++;
+                        if (loaded === mediaElements.length) {
+                            finishLoading();
+                        }
+                    };
+
+                    if ((el.tagName === "IMG" && el.complete) || 
+                        (el.tagName === "VIDEO" && el.readyState >= 3)) {
+                        handle();
+                    } else {
+                        el.addEventListener("load", handle);
+                        el.addEventListener("error", handle);
+                    }
+                });
             }
-            40% {
-                transform: scale(1);
-            }
-        }
-    </style>
 
-
-        <!-- JavaScript to Hide Loader -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                setTimeout(() => {
-                    document.getElementById("loader").style.display = "none";
-                }, 2000); // Adjust the timeout to control how long the loader appears
-            });
-        </script>
+            // Always fallback after max load time
+            setTimeout(finishLoading, MAX_LOAD_TIME);
+        });
+    } else {
+        // Instantly remove loader for return visitors
+        window.addEventListener("DOMContentLoaded", hideLoader);
+    }
+</script>
 
 
     <style>
@@ -125,8 +160,8 @@
         }
       </style>
       
-      <header class="fixed w-full top-0 left-0 z-50">
-        <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900 shadow-md">
+      <header class="fixed w-full">
+        <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
           <div class="flex items-center justify-between max-w-screen-xl px-4 mx-auto">
             <!-- Logo Section -->
             <a href="#" class="flex items-center">
@@ -154,22 +189,41 @@
             </button>
       
             <!-- Navbar Links -->
-            <div id="mobile-menu" class="hidden lg:flex flex-col lg:flex-row lg:space-x-8 lg:mt-0">
+            <div
+              id="mobile-menu"
+              class="hidden lg:flex flex-col lg:flex-row lg:space-x-8 lg:mt-0"
+            >
               <ul class="flex flex-col lg:flex-row font-medium lg:space-x-8 lg:mt-0">
                 <li>
-                  <a href="#home" class="nav-link">Home</a>
+                  <a
+                    href="#home"
+                    class="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 dark:text-white"
+                    aria-current="page"
+                  >Home</a>
                 </li>
                 <li>
-                  <a href="#about-us" class="nav-link">About Us</a>
+                  <a
+                    href="#about-us"
+                    class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  >About Us</a>
                 </li>
                 <li>
-                  <a href="#services" class="nav-link">Services</a>
+                  <a
+                    href="#services"
+                    class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  >Services</a>
                 </li>
                 <li>
-                  <a href="#portfolio" class="nav-link">Portfolio</a>
+                  <a
+                    href="#portfolio"
+                    class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  >Portfolio</a>
                 </li>
                 <li>
-                  <a href="#contact" class="nav-link">Contact</a>
+                  <a
+                    href="#contact"
+                    class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                  >Contact</a>
                 </li>
               </ul>
             </div>
@@ -188,13 +242,13 @@
       
           // Highlight active link on scroll
           const sections = document.querySelectorAll("section");
-          const navLinks = document.querySelectorAll(".nav-link");
+          const navLinks = document.querySelectorAll("nav ul li a");
       
           function activateLink() {
             let currentSection = "";
       
             sections.forEach((section) => {
-              const sectionTop = section.offsetTop - 80;
+              const sectionTop = section.offsetTop - 80; // Adjust offset for navbar height
               const sectionHeight = section.offsetHeight;
       
               if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
@@ -203,9 +257,9 @@
             });
       
             navLinks.forEach((link) => {
-              link.classList.remove("text-purple-700", "font-bold");
+              link.classList.remove("active");
               if (link.getAttribute("href").substring(1) === currentSection) {
-                link.classList.add("text-purple-700", "font-bold");
+                link.classList.add("active");
               }
             });
           }
@@ -213,23 +267,6 @@
           window.addEventListener("scroll", activateLink);
         });
       </script>
-      
-      <style>
-        .nav-link {
-          display: block;
-          padding: 10px 15px;
-          text-decoration: none;
-          color: #4a4a4a;
-          transition: color 0.3s ease;
-        }
-      
-        .nav-link:hover {
-          color: #6b46c1;
-        }
-      </style>
-      
-      
-      
       
 
 
@@ -339,17 +376,16 @@
             </div>
         </section>
 
+
         <style>
             .service-img-wrapper {
-                overflow: hidden;
-                position: relative;
-                padding-top: 50px; /* Creates space above images to prevent navbar overlap */
+                overflow: hidden; /* Ensures the scrolling happens within the visible area */
             }
 
             .service-img-container {
                 display: flex;
-                gap: 150px;
-                animation: scroll 30s linear infinite;
+                gap: 150px; /* Ensures ample spacing between images */
+                animation: scroll 30s linear infinite; /* Continuous scrolling animation */
                 will-change: transform;
             }
 
@@ -359,7 +395,7 @@
                 align-items: center;
                 width: 100px;
                 height: 100px;
-                flex-shrink: 0;
+                flex-shrink: 0; /* Prevents the images from resizing */
             }
 
             .service-img-item img {
@@ -373,24 +409,17 @@
                     transform: translateX(0);
                 }
                 to {
-                    transform: translateX(-50%);
+                    transform: translateX(-50%); /* Scroll halfway to show the next set */
                 }
-            }
-
-            /* Mobile-specific fixes */
+            
+            /* Faster scrolling for mobile devices */
             @media (max-width: 768px) {
                 .service-img-container {
-                    animation: scroll 7s linear infinite; /* Faster scrolling */
-                }
-
-                .service-img-wrapper {
-                    padding-top: 80px; /* Push images down further on mobile */
-                    clip-path: inset(10% 0 0 0); /* Hides top 10% of images to prevent overlap */
+                    animation: scroll 15s linear infinite; /* Doubles the speed */
                 }
             }
         </style>
 <!-- End block -->
-
 
 
 
@@ -595,27 +624,116 @@
 <!-- End block -->
 
 
-    <!-- Start block -->
-    <section class="bg-gray-50 dark:bg-gray-800">
-        <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-24 lg:px-6">
-            <figure class="max-w-screen-md mx-auto">
-                <svg class="h-12 mx-auto mb-3 text-gray-400 dark:text-gray-600" viewBox="0 0 24 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" fill="currentColor"/>
-                </svg> 
-                <blockquote>
-                    <p class="text-xl font-medium text-gray-900 md:text-2xl dark:text-white">"Landwind is just awesome. It contains tons of predesigned components and pages starting from login screen to complex dashboard. Perfect choice for your next SaaS application."</p>
-                </blockquote>
-                <figcaption class="flex items-center justify-center mt-6 space-x-3">
-                    <img class="w-6 h-6 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gouch.png" alt="profile picture">
-                    <div class="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
-                        <div class="pr-3 font-medium text-gray-900 dark:text-white">Micheal Gough</div>
-                        <div class="pl-3 text-sm font-light text-gray-500 dark:text-gray-400">CEO at Google</div>
-                    </div>
-                </figcaption>
-            </figure>
+    <!-- Start Testimonials Carousel -->
+<section class="bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-screen-md px-4 py-12 mx-auto text-center lg:py-24 lg:px-6">
+      <div class="relative">
+        <!-- Testimonials Container -->
+        <div id="testimonial-carousel" class="relative overflow-hidden">
+          <!-- Testimonial Slides -->
+          <div class="testimonial-slide transition-opacity duration-500 opacity-100 block">
+            <svg class="h-8 mb-4 text-gray-400 dark:text-gray-600 mx-auto" viewBox="0 0 24 27" fill="none">
+              <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" fill="currentColor"/>
+            </svg>
+            <blockquote class="text-lg text-gray-900 dark:text-white">"This product completely changed how we operate. Highly recommended!"</blockquote>
+            <figcaption class="mt-4 flex items-center justify-center space-x-3">
+              <img class="w-8 h-8 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gouch.png" alt="User">
+              <div class="text-left">
+                <div class="font-medium text-gray-900 dark:text-white">Sarah James</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">CMO at Meta</div>
+              </div>
+            </figcaption>
+          </div>
+  
+          <div class="testimonial-slide transition-opacity duration-500 opacity-0 hidden">
+            <svg class="h-8 mb-4 text-gray-400 dark:text-gray-600 mx-auto" viewBox="0 0 24 27" fill="none">
+              <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" fill="currentColor"/>
+            </svg>
+            <blockquote class="text-lg text-gray-900 dark:text-white">"Seamless integration and gorgeous UI. We love the simplicity!"</blockquote>
+            <figcaption class="mt-4 flex items-center justify-center space-x-3">
+              <img class="w-8 h-8 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="User">
+              <div class="text-left">
+                <div class="font-medium text-gray-900 dark:text-white">Karen Nelson</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Designer at Canva</div>
+              </div>
+            </figcaption>
+          </div>
+  
+          <div class="testimonial-slide transition-opacity duration-500 opacity-0 hidden">
+            <svg class="h-8 mb-4 text-gray-400 dark:text-gray-600 mx-auto" viewBox="0 0 24 27" fill="none">
+              <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" fill="currentColor"/>
+            </svg>
+            <blockquote class="text-lg text-gray-900 dark:text-white">"Their support team is top-notch. Our go-to for all new projects."</blockquote>
+            <figcaption class="mt-4 flex items-center justify-center space-x-3">
+              <img class="w-8 h-8 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/thomas-lean.png" alt="User">
+              <div class="text-left">
+                <div class="font-medium text-gray-900 dark:text-white">Thomas Lean</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Lead Dev at Figma</div>
+              </div>
+            </figcaption>
+          </div>
         </div>
-      </section>
-    <!-- End block -->
+  
+        <!-- Carousel Buttons -->
+        <div class="flex justify-center mt-6 space-x-4">
+          <button onclick="changeTestimonial(-1)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-full dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+            &larr;
+          </button>
+          <button onclick="changeTestimonial(1)" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-full dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+            &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Testimonials Carousel -->
+  
+  <!-- Custom Styles for Testimonials -->
+  <style>
+    .testimonial-slide {
+      display: none;
+    }
+  
+    .testimonial-slide.opacity-100 {
+      display: block;
+    }
+  
+    .testimonial-slide.hidden {
+      display: none;
+    }
+  
+    .testimonial-slide.transition-opacity {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+  
+    .testimonial-slide.opacity-100 {
+      opacity: 1;
+    }
+  
+    .testimonial-slide.hidden {
+      opacity: 0;
+    }
+  </style>
+  
+  <script>
+    let current = 0;
+    const slides = document.querySelectorAll('.testimonial-slide');
+  
+    function changeTestimonial(direction) {
+      slides[current].classList.add('hidden');
+      slides[current].classList.remove('opacity-100');
+      slides[current].classList.add('opacity-0');
+  
+      current = (current + direction + slides.length) % slides.length;
+  
+      slides[current].classList.remove('hidden');
+      slides[current].classList.remove('opacity-0');
+      slides[current].classList.add('opacity-100');
+    }
+  </script>
+  
+  
 
 
 
@@ -952,7 +1070,7 @@
             <div class="projects-grid">
                 <!-- Project 1 -->
                 <div class="project-card">
-                    <img src="./images/Banking.jpg" alt="Banking App" class="project-image">
+                    <img src="./images/banking.jpg" alt="Banking App" class="project-image">
                     <h3 class="project-title">Banking App</h3>
                     <p class="project-description">
                         A robust finance management dashboard integrating multiple bank accounts, real-time transaction updates, and secure money transfers.
